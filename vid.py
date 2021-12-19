@@ -7,11 +7,13 @@ time_per_frame = 1 / fps
 
 scale_points = []  # used to track two scale points (first two clicked)
 scale = 0  # will be set to px/m
+scale_amount = 0.283  # how many m is the px scale equivalent to 
 
 points = []  # stores all clicked points (after scale points)
-speeds = []  # stores speeds of each subsequent click (idx 0 is the speed between idx 0 and 1 of points)
-mean_speed = 0  # ovr mean speed
 len_points = 0  # track length of points (MAX SPEED and EFFICIENCY BRO)
+speeds = []  # stores speeds of each subsequent click (idx 0 is the speed between idx 0 and 1 of points)
+len_speeds = 0
+mean_speed = 0  # ovr mean speed
 
 
 def euc_distance(point0, point1):
@@ -34,6 +36,7 @@ def compute_speed():
 	global len_points
 	global mean_speed
 	global speeds
+	global len_speeds
 	global time_per_frame
 	global scale
 	
@@ -41,7 +44,13 @@ def compute_speed():
 	if len_points > 1:
 		speed = (euc_distance(points[-1], points[-2]) / scale) / time_per_frame
 		speeds.append(speed)
-		mean_speed = (mean_speed + speed) / 2
+		len_speeds += 1
+
+		# can only compute mean speed if more than 1 speed calculation has been made
+		if len_speeds > 1:
+			mean_speed = (mean_speed + speed) / 2
+		else:
+			mean_speed = speed
 
 		print(f"speed between last two points = {speed} m/s, mean speed = {mean_speed} m/s")
 
@@ -69,7 +78,7 @@ def handle_click(event, x, y, flags, param):
 			
 			# scale is made from first two points clicked
 			if len(scale_points) == 2:  
-				scale = euc_distance(scale_points[0], scale_points[1])
+				scale = euc_distance(scale_points[0], scale_points[1]) / scale_amount
 				print(f"scale set to {scale} px/m")
 
 	return
@@ -81,7 +90,7 @@ def main():
 	# actually draw circles, compute distance between points of frames
 	# compute speed (average each subsequent speed calc? other methdo?)
 
-	path = "test_vid.mp4"
+	path = "test_vid_2.MOV"
 	cap = cv2.VideoCapture(path)
 	cv2.namedWindow("window")
 	cv2.setMouseCallback("window", handle_click)
@@ -100,12 +109,12 @@ def main():
 			break
 
 		elif key == ord('a'):  # left arrow
-			print("left clicked")
+			#print("left clicked")
 			frame_idx -= 1  # TODO err handles
 			cap.set(cv2.CAP_PROP_POS_FRAMES, frame_idx)
 
 		elif key == ord('d'):  # right arrow
-			print("right clicked")
+			#print("right clicked")
 			frame_idx += 1  # TODO err handles
 			cap.set(cv2.CAP_PROP_POS_FRAMES, frame_idx)
 
