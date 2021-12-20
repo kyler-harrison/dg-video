@@ -29,6 +29,16 @@ def euc_distance(point0, point1):
 	return np.sqrt((point0[0] - point1[0]) ** 2 + (point0[1]- point1[1]) ** 2)
 
 
+def ms_2_mph(speed):
+	"""
+	compute mph from m/s
+	speed: speed in m/s
+	returns speed in mph
+	"""
+
+	return speed * 2.23694
+
+
 def compute_speed():
 	"""
 	computes speed between last two point tuples in points (if possible) and overall mean speed
@@ -56,7 +66,9 @@ def compute_speed():
 		else:
 			mean_speed = speed
 
-		print(f"speed between last two points = {speed:.3f} +- {speed_uncertainty:.3f} m/s, mean speed = {mean_speed:.3f} +- {speed_uncertainty:.3f} m/s")
+		# NOTE the inefficiency
+		print(f"\nspeed between last two points = {speed:.3f} +- {speed_uncertainty:.3f} m/s ({ms_2_mph(speed):.3f} +- {ms_2_mph(speed_uncertainty):.3f} mph)")
+		print(f"ovr. mean speed = {mean_speed:.3f} +- {speed_uncertainty:.3f} m/s ({ms_2_mph(speed):.3f} +- {ms_2_mph(speed_uncertainty):.3f} mph)")
 
 
 def handle_click(event, x, y, flags, param):
@@ -94,7 +106,7 @@ def main():
 	# actually draw circles, compute distance between points of frames
 	# compute speed (average each subsequent speed calc? other methdo?)
 
-	path = "test_vid_0.MOV"
+	path = "fc_1.MOV"
 	cap = cv2.VideoCapture(path)
 	cv2.namedWindow("window")
 	cv2.setMouseCallback("window", handle_click)
