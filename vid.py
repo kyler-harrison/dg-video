@@ -15,6 +15,10 @@ speeds = []  # stores speeds of each subsequent click (idx 0 is the speed betwee
 len_speeds = 0
 mean_speed = 0  # ovr mean speed
 
+scale_uncertainty = 20  # +- px
+point_uncertainty = 10  # +- px
+speed_uncertainty = point_uncertainty / scale_uncertainty  # prop. uncertainties through and it's this many +- m/s
+
 
 def euc_distance(point0, point1):
 	"""
@@ -52,7 +56,7 @@ def compute_speed():
 		else:
 			mean_speed = speed
 
-		print(f"speed between last two points = {speed} m/s, mean speed = {mean_speed} m/s")
+		print(f"speed between last two points = {speed:.3f} +- {speed_uncertainty:.3f} m/s, mean speed = {mean_speed:.3f} +- {speed_uncertainty:.3f} m/s")
 
 
 def handle_click(event, x, y, flags, param):
@@ -90,7 +94,7 @@ def main():
 	# actually draw circles, compute distance between points of frames
 	# compute speed (average each subsequent speed calc? other methdo?)
 
-	path = "test_vid_2.MOV"
+	path = "test_vid_0.MOV"
 	cap = cv2.VideoCapture(path)
 	cv2.namedWindow("window")
 	cv2.setMouseCallback("window", handle_click)
