@@ -20,7 +20,23 @@ def compute_box_scores(frame, target_box):
 	frame: video frame (np array)
 	target_box: np array of rgb values of original detection box (from get_box())
 
-	returns box (computed from get_box()) of the least different box in frame
+	returns upper_left and bottom_right points of best box
 	"""
 	pass
+
+
+def predict_center(frame, best_upper_left, best_bottom_right):
+	"""
+	predicts the x,y center position of the disc based on the best box points from compute_box_scores
+	assumes best_upper_left.x < best_bottom_right.x and best_upper_left.y < best_bottom_right.y
+	"prediction" is just the center of the x,y points (mean)
+
+	frame: frame that is NOT the release frame (all subsequent frames)
+	best_upper_left: (x, y) of best box upper left
+	best_bottom_right: (x, y) of best box bottom right
+
+	returns predicted (x, y) center position in frame
+	"""
+
+	return (int((best_upper_left[0] + best_bottom_right[0]) / 2), int((best_upper_left[1] + best_bottom_right[1]) / 2)
 
