@@ -11,9 +11,14 @@ scale_amount = 0.283  # how many m is the px scale equivalent to
 
 points = []  # stores all clicked points (after scale points)
 len_points = 0  # track length of points (MAX SPEED and EFFICIENCY BRO)
+
 speeds = []  # stores speeds of each subsequent click (idx 0 is the speed between idx 0 and 1 of points)
+speeds_x = []
+speeds_y = []
 len_speeds = 0
 mean_speed = 0  # ovr mean speed
+mean_speed_x = 0
+mean_speed_y = 0
 
 scale_uncertainty = 20  # +- px
 point_uncertainty = 10  # +- px
@@ -43,19 +48,26 @@ def compute_speed():
 	"""
 	computes speed between last two point tuples in points (if possible) and overall mean speed
 	assumes each point in points came from a unique frame and is in sequential order (should change later)
-	also assumes each point is frame to frame (no skipped frames - again, change this later (not hard))
+	also assumes each point is frame to frame (no skipped frames - again, change this later (not hard - just track frame idx))
 	"""
 
 	global points
 	global len_points
 	global mean_speed
+	global mean_speed_x
+	global mean_speed_y
 	global speeds
 	global len_speeds
+	global speeds_x
+	global speeds_y
 	global time_per_frame
 	global scale
 	
 	# can only compute speed if at least two points exist
 	if len_points > 1:
+		# NOTE computing component speeds makes euc_distance() redundant
+		speed_x = abs(points[-1][0] - points[-2][0]) / scale / time_per_frame
+		speed_y = abs(points[-1][1] - points[-2][1]) / scale / time_per_frame
 		speed = (euc_distance(points[-1], points[-2]) / scale) / time_per_frame
 		speeds.append(speed)
 		len_speeds += 1
@@ -63,12 +75,18 @@ def compute_speed():
 		# can only compute mean speed if more than 1 speed calculation has been made
 		if len_speeds > 1:
 			mean_speed = (mean_speed + speed) / 2
+			mean_speed_x = (mean_speed_x + speed_x) / 2
+			mean_speed_y = (mean_speed_y + speed_y) / 2
 		else:
 			mean_speed = speed
+			mean_speed_x = speed_x
+			mean_speed_y = speed_y
 
 		# NOTE the inefficiency
 		print(f"\nspeed between last two points = {speed:.3f} +- {speed_uncertainty:.3f} m/s ({ms_2_mph(speed):.3f} +- {ms_2_mph(speed_uncertainty):.3f} mph)")
-		print(f"ovr. mean speed = {mean_speed:.3f} +- {speed_uncertainty:.3f} m/s ({ms_2_mph(speed):.3f} +- {ms_2_mph(speed_uncertainty):.3f} mph)")
+		print(f"speed = [{speed_x:.3f}, {speed_y:.3f}] m/s ([{ms_2_mph(speed_x)}, {ms_2_mph(speed_y)}] mph)")
+		print(f"ovr. mean speed = {mean_speed:.3f} +- {speed_uncertainty:.3f} m/s ({ms_2_mph(mean_speed):.3f} +- {ms_2_mph(speed_uncertainty):.3f} mph)")
+		print(f"mean speed = [{mean_speed_x:.3f}, {mean_speed_y:.3f}] +- {speed_uncertainty:.3f} m/s ([{ms_2_mph(mean_speed_x):.3f}, {ms_2_mph(mean_speed_y):.3f}] mph)")
 
 
 def handle_click(event, x, y, flags, param):
