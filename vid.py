@@ -5,6 +5,9 @@ import numpy as np
 fps = 30  # TODO actually get
 time_per_frame = 1 / fps
 
+num_clicks = 0
+release_box_points = []  # holds 4 points of the release box
+
 scale_points = []  # used to track two scale points (first two clicked)
 scale = 0  # will be set to px/m
 scale_amount = 0.283  # how many m is the px scale equivalent to 
@@ -96,17 +99,31 @@ def handle_click(event, x, y, flags, param):
 	"""
 
 	# TODO any way to not use globals?
+	global num_clicks
 	global points 
 	global len_points
 	global scale_points
 	global scale
+	global release_box_points
 	
 	if event == cv2.EVENT_LBUTTONDBLCLK:
-		if scale > 0:
+		num_clicks += 1
+		print(f"num_clicks = {num_clicks}")
+
+		# after scale and disc release box
+		if num_clicks > 4:
 			points.append((x, y))
 			len_points += 1
 			compute_speed()
 
+		# click for disc release box
+		elif 2 < num_clicks <= 4:
+			release_box_points.append((x, y, param["frame"][y][x][0], param["frame"][y][x][1], param["frame"][y][x][2]))
+
+			if num_clicks == 4:
+				print(f"release_box_points = {release_box}")
+
+		# set scale
 		else:
 			scale_points.append((x, y))
 			
@@ -124,15 +141,17 @@ def main():
 	# actually draw circles, compute distance between points of frames
 	# compute speed (average each subsequent speed calc? other methdo?)
 
+	print("first 2 clicks: set scale\nnext 2 clicks: release bounding box (top left, bottom right)\nnext clicks: center position of disc in subsequent frames")
 	path = "fc_1.MOV"
 	cap = cv2.VideoCapture(path)
 	cv2.namedWindow("window")
-	cv2.setMouseCallback("window", handle_click)
 	frame_idx = 0
 
 	while True:
 		#print("i ran")
 		ret, frame = cap.read()
+		param = {"frame": frame}  # TODO can i do this?
+		cv2.setMouseCallback("window", handle_click, param)
 		cv2.imshow("window", frame)
 
 		key = cv2.waitKeyEx(0)  # press 0 to destroy window or see below
@@ -153,7 +172,7 @@ def main():
 			cap.set(cv2.CAP_PROP_POS_FRAMES, frame_idx)
 
 	cv2.destroyAllWindows()
-	
+
 
 if __name__ == "__main__":
 	main()
