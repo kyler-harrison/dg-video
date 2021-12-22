@@ -19,6 +19,8 @@ def get_box(frame, upper_left, bottom_right):
 def compute_box_scores(frame, target_box):
 	"""
 	given a frame and target_box, iterate the target_box over the frame and compute rgb difference
+	NOTE this only appears to work when disc is a color that is distinct from background, and the initial
+	bounding box is very small (like <= 10px x 10px), seems too messy to work otherwise
 
 	frame: video frame (np array)
 	target_box: np array of rgb values of original detection box (from get_box())
@@ -60,7 +62,7 @@ def compute_box_scores(frame, target_box):
 	
 	for i, diff in enumerate(diffs[:10]):
 		pred_center = predict_center(frame, diff[1], diff[2])
-		print(f"{i} center prediction: {pred_center}")
+		print(f"{i} center prediction: {pred_center}, diff sum = {diff}")
 
 
 def predict_center(frame, best_upper_left, best_bottom_right):
