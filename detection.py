@@ -1,3 +1,6 @@
+import numpy as np
+
+
 def get_box(frame, upper_left, bottom_right):
 	"""
 	from given frame and two corners, get matrix of all points bounded 
@@ -22,7 +25,42 @@ def compute_box_scores(frame, target_box):
 
 	returns upper_left and bottom_right points of best box
 	"""
-	pass
+
+	box_shape = target_box.shape
+	row_shift = box_shape[0]
+	col_shift = box_shape[1]
+	print(f"box_shape = {target_box.shape}, row_shift = {row_shift}, col_shift = {col_shift}")
+
+	frame_shape = frame.shape
+
+	num_row_shifts = frame_shape[0] // row_shift
+	num_col_shifts = frame_shape[1] // col_shift 
+
+	row_start = 0
+	row_end = row_start + row_shift
+
+	diffs = []
+
+	for row_idx in range(num_row_shifts):
+		col_start = 0
+		col_end = col_start + col_shift
+		
+		for col_idx in range(num_col_shifts):
+			#print(f"done: row_idx = {row_idx}, col_idx = {col_idx}")
+			diffs.append((np.sum(np.abs(target_box - frame[row_start:row_end, col_start:col_end])), (col_start, row_start), (col_end, row_end)))
+			col_start = col_end
+			col_end += col_shift
+
+		row_start = row_end
+		row_end += row_shift
+	
+	# TODO change
+
+	diffs.sort()
+	
+	for i, diff in enumerate(diffs[:10]):
+		pred_center = predict_center(frame, diff[1], diff[2])
+		print(f"{i} center prediction: {pred_center}")
 
 
 def predict_center(frame, best_upper_left, best_bottom_right):
@@ -38,5 +76,5 @@ def predict_center(frame, best_upper_left, best_bottom_right):
 	returns predicted (x, y) center position in frame
 	"""
 
-	return (int((best_upper_left[0] + best_bottom_right[0]) / 2), int((best_upper_left[1] + best_bottom_right[1]) / 2)
+	return (int((best_upper_left[0] + best_bottom_right[0]) / 2), int((best_upper_left[1] + best_bottom_right[1]) / 2))
 
