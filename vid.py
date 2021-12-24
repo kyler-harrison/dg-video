@@ -1,5 +1,6 @@
 import cv2
 import numpy as np
+from detection import get_box, compute_box_scores
 
 
 fps = 30  # TODO actually get
@@ -7,6 +8,11 @@ time_per_frame = 1 / fps
 
 num_clicks = 0
 release_box_points = []  # holds 4 points of the release box
+release_box = None
+
+# TODO rm after done testing detection
+next_box_points = []
+next_box = None
 
 scale_points = []  # used to track two scale points (first two clicked)
 scale = 0  # will be set to px/m
@@ -65,6 +71,7 @@ def compute_speed():
 	global speeds_y
 	global time_per_frame
 	global scale
+
 	
 	# can only compute speed if at least two points exist
 	if len_points > 1:
@@ -87,7 +94,7 @@ def compute_speed():
 
 		# NOTE the inefficiency
 		print(f"\nspeed between last two points = {speed:.3f} +- {speed_uncertainty:.3f} m/s ({ms_2_mph(speed):.3f} +- {ms_2_mph(speed_uncertainty):.3f} mph)")
-		print(f"speed = [{speed_x:.3f}, {speed_y:.3f}] m/s ([{ms_2_mph(speed_x)}, {ms_2_mph(speed_y)}] mph)")
+		print(f"speed = [{speed_x:.3f}, {speed_y:.3f}] m/s ([{ms_2_mph(speed_x):.3f}, {ms_2_mph(speed_y):.3f}] mph)")
 		print(f"ovr. mean speed = {mean_speed:.3f} +- {speed_uncertainty:.3f} m/s ({ms_2_mph(mean_speed):.3f} +- {ms_2_mph(speed_uncertainty):.3f} mph)")
 		print(f"mean speed = [{mean_speed_x:.3f}, {mean_speed_y:.3f}] +- {speed_uncertainty:.3f} m/s ([{ms_2_mph(mean_speed_x):.3f}, {ms_2_mph(mean_speed_y):.3f}] mph)")
 
@@ -105,23 +112,46 @@ def handle_click(event, x, y, flags, param):
 	global scale_points
 	global scale
 	global release_box_points
+	global release_box
+	global next_box_points
+	global next_box
 	
 	if event == cv2.EVENT_LBUTTONDBLCLK:
 		num_clicks += 1
-		print(f"num_clicks = {num_clicks}")
+		print(f"(x,y) = ({x}, {y}), num_clicks = {num_clicks}")
 
 		# after scale and disc release box
 		if num_clicks > 4:
+			"""
 			points.append((x, y))
 			len_points += 1
 			compute_speed()
+			"""
+
+			next_box_points.append([x, y])
+
+			if num_clicks % 2 == 0:
+				next_box_points[1][1] = next_box_points[0][1] + release_box.shape[0]
+				next_box_points[1][0] = next_box_points[0][0] + release_box.shape[1]
+
+				next_box = get_box(param["frame"], next_box_points[0], next_box_points[1])
+				diff_sum = np.sum(np.abs(next_box - release_box))
+				print(f"diff_sum = {diff_sum}")
+				next_box_points = []
+
+			compute_box_scores(param["frame"], release_box)
 
 		# click for disc release box
 		elif 2 < num_clicks <= 4:
-			release_box_points.append((x, y, param["frame"][y][x][0], param["frame"][y][x][1], param["frame"][y][x][2]))
+			release_box_points.append((x, y))
 
 			if num_clicks == 4:
-				print(f"release_box_points = {release_box}")
+				#print(param["frame"][:10])
+				#print(release_box_points[0])
+				release_box = get_box(param["frame"], release_box_points[0], release_box_points[1])
+				#b = frame[release_box_points[0][1]:release_box_points[1][1], release_box_points[0][0]:release_box_points[1][0]]
+				print(f"release_box_points = {release_box_points}")
+				print(f"release_box.shape = {release_box.shape}")
 
 		# set scale
 		else:
