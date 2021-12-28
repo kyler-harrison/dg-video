@@ -15,22 +15,25 @@ TopLayout::TopLayout(QWidget *parent) : QWidget(parent) {
 	// top menu
 	auto *menu = new QMenuBar();
 	menu->addMenu("&File");
+	menu->setStyleSheet("background-color: purple");
 	leftVBox->addWidget(menu);
 
 	// image viewer
 	auto *label = new QLabel("IMAGE");
+	label->setStyleSheet("background-color: blue");
 	leftVBox->addWidget(label);
 
 	// image viewer actions/options
 	auto *imgOptions = new QLabel("OPTIONS");
+	imgOptions->setStyleSheet("background-color: red");
 	leftVBox->addWidget(imgOptions);
 
 	// right side settings/info box
 	auto *rightInfo = new QLabel("INFO/SETTINGS");
-
+	rightInfo->setStyleSheet("background-color: green");
 
 	parentHBox->addLayout(leftVBox);
-	parentHBox->addSpacing(16);
+	//parentHBox->addSpacing(16);
 	parentHBox->addWidget(rightInfo);
 	setLayout(parentHBox);
 }
