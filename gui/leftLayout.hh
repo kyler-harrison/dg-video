@@ -6,6 +6,10 @@
  */
 
 class LeftLayout : public QVBoxLayout {
+	private:
+		const char *filePath;
+
 	public:
 		LeftLayout(QWidget *parent = nullptr);
+		void handleFile();
 };
