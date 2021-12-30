@@ -1,0 +1,55 @@
+# WHAT YOU HAVE TO DO:
+# if new .cc file is created, add a corresponding .o to OBJS
+# add new .o target with corresponding .hh
+# add new target to all target
+# shouldn't need to touch anything else unless messing with libraries
+
+# general compiler stuff
+COMP = g++
+CFLAGS = -O1
+OBJS = main.o window.o parentLayout.o leftLayout.o rightLayout.o
+TARGET = app
+
+# opencv stuff (build objs, then to compilation with qt stuff)
+CV_INCLUDES = -I /usr/local/include/opencv2 
+CV_OBJ_LIBS = -L /usr/local/lib
+CV_FLAGS = -lopencv_core -lopencv_imgproc -lopencv_highgui -lopencv_ml -lopencv_video -lopencv_features2d -lopencv_calib3d -lopencv_objdetect -lopencv_stitching
+CV_LIBS = /usr/local/lib/libopencv_calib3d.so /usr/local/lib/libopencv_calib3d.so.405 /usr/local/lib/libopencv_calib3d.so.4.5.5 /usr/local/lib/libopencv_core.so /usr/local/lib/libopencv_core.so.405 /usr/local/lib/libopencv_core.so.4.5.5 /usr/local/lib/libopencv_dnn.so /usr/local/lib/libopencv_dnn.so.405 /usr/local/lib/libopencv_dnn.so.4.5.5 /usr/local/lib/libopencv_features2d.so /usr/local/lib/libopencv_features2d.so.405 /usr/local/lib/libopencv_features2d.so.4.5.5 /usr/local/lib/libopencv_flann.so /usr/local/lib/libopencv_flann.so.405 /usr/local/lib/libopencv_flann.so.4.5.5 /usr/local/lib/libopencv_gapi.so /usr/local/lib/libopencv_gapi.so.405 /usr/local/lib/libopencv_gapi.so.4.5.5 /usr/local/lib/libopencv_highgui.so /usr/local/lib/libopencv_highgui.so.405 /usr/local/lib/libopencv_highgui.so.4.5.5 /usr/local/lib/libopencv_imgcodecs.so /usr/local/lib/libopencv_imgcodecs.so.405 /usr/local/lib/libopencv_imgcodecs.so.4.5.5 /usr/local/lib/libopencv_imgproc.so /usr/local/lib/libopencv_imgproc.so.405 /usr/local/lib/libopencv_imgproc.so.4.5.5 /usr/local/lib/libopencv_ml.so /usr/local/lib/libopencv_ml.so.405 /usr/local/lib/libopencv_ml.so.4.5.5 /usr/local/lib/libopencv_objdetect.so /usr/local/lib/libopencv_objdetect.so.405 /usr/local/lib/libopencv_objdetect.so.4.5.5 /usr/local/lib/libopencv_photo.so /usr/local/lib/libopencv_photo.so.405 /usr/local/lib/libopencv_photo.so.4.5.5 /usr/local/lib/libopencv_stitching.so /usr/local/lib/libopencv_stitching.so.405 /usr/local/lib/libopencv_stitching.so.4.5.5 /usr/local/lib/libopencv_videoio.so /usr/local/lib/libopencv_videoio.so.405 /usr/local/lib/libopencv_videoio.so.4.5.5 /usr/local/lib/libopencv_video.so /usr/local/lib/libopencv_video.so.405 /usr/local/lib/libopencv_video.so.4.5.5
+
+# qt stuff (build objs, then to compilation with opencv stuff)
+QT_OBJ_FLAGS = -pipe -O2 -Wall -W -D_REENTRANT -fPIC -DQT_DEPRECATED_WARNINGS -DQT_NO_DEBUG -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_CORE_LIB
+QT_INCLUDES = -I. -I. -isystem /usr/include/x86_64-linux-gnu/qt5 -isystem /usr/include/x86_64-linux-gnu/qt5/QtWidgets -isystem /usr/include/x86_64-linux-gnu/qt5/QtGui -isystem /usr/include/x86_64-linux-gnu/qt5/QtCore -I. -I /usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++
+QT_FLAGS = -lpthread
+QT_LIBS = /usr/lib/x86_64-linux-gnu/libQt5Widgets.so /usr/lib/x86_64-linux-gnu/libQt5Gui.so /usr/lib/x86_64-linux-gnu/libQt5Core.so /usr/lib/x86_64-linux-gnu/libGL.so
+
+all: main.o window.o parentLayout.o leftLayout.o rightLayout.o build_app 
+	@echo It has been made.
+
+# build object files
+main.o: main.cc
+	$(COMP) $(QT_OBJ_FLAGS) $(QT_INCLUDES) -c -o main.o main.cc
+
+window.o: window.cc window.hh
+	$(COMP) $(QT_OBJ_FLAGS) $(QT_INCLUDES) -c -o window.o window.cc
+
+parentLayout.o: parentLayout.cc parentLayout.hh
+	$(COMP) $(QT_OBJ_FLAGS) $(QT_INCLUDES) -c -o parentLayout.o parentLayout.cc
+
+leftLayout.o: leftLayout.cc leftLayout.hh
+	$(COMP) $(QT_OBJ_FLAGS) $(QT_INCLUDES) -c -o leftLayout.o leftLayout.cc
+
+rightLayout.o: rightLayout.cc rightLayout.hh
+	$(COMP) $(QT_OBJ_FLAGS) $(QT_INCLUDES) -c -o rightLayout.o rightLayout.cc
+
+# build the final executable 
+build_app: $(OBJS)
+	$(COMP) $(CFLAGS) $(CV_FLAGS) $(QT_FLAGS) -o $(TARGET) $(OBJS) $(CV_LIBS) $(QT_LIBS)
+
+# example for any file that requires opencv
+# test.o: test.cc test.hh
+# 	$(COMP) $(CV_INCLUDES) $(CV_OBJ_LIBS) -c -o test.o test.cc
+
+.PHONY: clean
+clean:
+	rm *.o
+
