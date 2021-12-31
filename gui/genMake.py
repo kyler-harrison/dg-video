@@ -66,7 +66,7 @@ def writeMake(sources, headers, includes, exeTarget, makePath="Makefile"):
 	objLine = f"OBJS = {objsStr}"
 
 	# all target
-	allTarget = f"all: {objsStr} build_app\n\t@echo It has been made."
+	allTarget = f"all: {objsStr} build_app clean\n\t@echo It has been made."
 
 	# create object file targets
 	targetLines = []
