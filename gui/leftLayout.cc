@@ -1,7 +1,6 @@
 #include "leftLayout.hh"
 #include "menu.hh"
 #include "vidControls.hh"
-#include "vidViewer.hh"
 
 #include <QVBoxLayout>
 #include <QMenuBar>
@@ -16,12 +15,14 @@
  */
 
 LeftLayout::LeftLayout(QWidget *parent) : QVBoxLayout(parent) {
-	// top menu
-	Menu *menu = new Menu();
-	this->addWidget(menu);
-
 	// video viewer
 	VidViewer *vidViewer = new VidViewer();
+
+	// top menu
+	Menu *menu = new Menu(parent, vidViewer);  // is parent supposed to be passed? wtf is parent anyways
+	this->addWidget(menu);
+
+	// add and center vidViewer
 	this->addWidget(vidViewer);
 	this->setAlignment(vidViewer, Qt::AlignHCenter);
 
