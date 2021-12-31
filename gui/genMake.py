@@ -1,14 +1,56 @@
 #!/usr/bin/python3
-
 import os
+import sys
 
 
-def writeMake(sources, headers, exeTarget, makePath="Makefile"):
+def checkIncludes(ccFile, headers):
+	"""
+	given a .cc file and header files, return string indicating whether it needs qt, opencv, or both libs
+
+	ccFile: string name of file to check #include of 
+	headers: list of .hh files
+
+	returns either "qt", "opencv", or "both"
+	"""
+
+	qtSearch = "Q"  # all QT includes start with Q
+	cvSearch = "opencv2/opencv.hpp"
+	qtFound = False
+	cvFound = False
+
+	# get includes from .cc
+	with open(ccFile, "r") as f:
+		includes = [line for line in f.readlines() if line[:8] == "#include"]
+
+	# if there is a .hh corresponding to .cc, get those includes too
+	if f"{ccFile[:-3]}.hh" in headers:
+		with open(f"{ccFile[:-3]}.hh", "r") as f:
+			includes += [line for line in f.readlines() if line[:8] == "#include"]
+
+	for include in includes:
+		if qtSearch in include:
+			qtFound = True
+		elif cvSearch in include:
+			cvFound = True
+
+	if qtFound and cvFound:
+		return "both"
+	elif qtFound:
+		return "qt"
+	elif cvFound:
+		return "opencv"
+	else:
+		return "neither"
+
+
+def writeMake(sources, headers, includes, exeTarget, makePath="Makefile"):
 	"""
 	creates a Makefile from .cc and .hh files, make to build final exe
 
 	sources: list of .cc files in pwd
 	headers: list of .hh files in pwd
+	includes: dictionary like {main: opencv, ...} (see checkIncludes for include options) 
+	          that determines how to compile the .o
 	exeTarget: string name of final executable
 	makePath: string file name of output Makefile
 
@@ -27,17 +69,22 @@ def writeMake(sources, headers, exeTarget, makePath="Makefile"):
 	allTarget = f"all: {objsStr} build_app\n\t@echo It has been made."
 
 	# create object file targets
-	# TODO this is only good for things that only include QT libs (will need to change stuff when using OpenCV libs)
-	# will need to read each file and examine includes
 	targetLines = []
 
 	for obj in objs:
 		objBase = obj[:-2]
 
 		if f"{objBase}.hh" in headers:
-			targetLine = f"{obj}: {objBase}.cc {objBase}.hh\n\t$(COMP) $(QT_OBJ_FLAGS) $(QT_INCLUDES) -c -o {obj} {objBase}.cc"
+			targetLine = f"{obj}: {objBase}.cc {objBase}.hh\n"
 		else:
-			targetLine = f"{obj}: {objBase}.cc\n\t$(COMP) $(QT_OBJ_FLAGS) $(QT_INCLUDES) -c -o {obj} {objBase}.cc"
+			targetLine = f"{obj}: {objBase}.cc\n"
+
+		if includes[objBase] == "qt":
+			targetLine += f"\t$(COMP) $(QT_OBJ_FLAGS) $(QT_INCLUDES) -c -o {obj} {objBase}.cc"
+		elif includes[objBase] == "opencv":
+			targetLine += f"\t$(COMP) $(CV_INCLUDES) $(CV_OBJ_LIBS) -c -o {obj} {objBase}.cc"
+		elif includes[objBase] == "both":
+			targetLine += f"\t$(COMP) $(QT_OBJ_FLAGS) $(QT_INCLUDES) $(CV_INCLUDES) $(CV_OBJ_LIBS) -c -o {obj} {objBase}.cc"
 
 		targetLines.append(targetLine)
 
@@ -57,7 +104,18 @@ def main():
 	sources = [f for f in files if f[-3:] == ".cc"]
 	headers = [f for f in files if f[-3:] == ".hh"]
 	exe = "app"
-	writeMake(sources, headers, exe)
+	includeDict = {}
+
+	for src in sources:
+		includeStr = checkIncludes(src, headers)
+
+		if includeStr == "neither":
+			printf(f"opencv nor QT library found for {src}")
+			sys.exit(-1)
+
+		includeDict[src[:-3]] = includeStr
+
+	writeMake(sources, headers, includeDict, exe)
 
 
 if __name__ == "__main__":
