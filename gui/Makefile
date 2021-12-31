@@ -7,7 +7,7 @@
 # general compiler stuff
 COMP = g++
 CFLAGS = -O1
-OBJS = main.o window.o parentLayout.o leftLayout.o rightLayout.o
+OBJS = main.o window.o parentLayout.o leftLayout.o rightLayout.o menu.o vidControls.o
 TARGET = app
 
 # opencv stuff (build objs, then to compilation with qt stuff)
@@ -22,7 +22,7 @@ QT_INCLUDES = -I. -I. -isystem /usr/include/x86_64-linux-gnu/qt5 -isystem /usr/i
 QT_FLAGS = -lpthread
 QT_LIBS = /usr/lib/x86_64-linux-gnu/libQt5Widgets.so /usr/lib/x86_64-linux-gnu/libQt5Gui.so /usr/lib/x86_64-linux-gnu/libQt5Core.so /usr/lib/x86_64-linux-gnu/libGL.so
 
-all: main.o window.o parentLayout.o leftLayout.o rightLayout.o build_app 
+all: main.o window.o parentLayout.o menu.o leftLayout.o rightLayout.o vidControls.o build_app 
 	@echo It has been made.
 
 # build object files
@@ -34,6 +34,12 @@ window.o: window.cc window.hh
 
 parentLayout.o: parentLayout.cc parentLayout.hh
 	$(COMP) $(QT_OBJ_FLAGS) $(QT_INCLUDES) -c -o parentLayout.o parentLayout.cc
+
+vidControls.o: vidControls.cc vidControls.hh
+	$(COMP) $(QT_OBJ_FLAGS) $(QT_INCLUDES) -c -o vidControls.o vidControls.cc
+
+menu.o: menu.cc menu.hh
+	$(COMP) $(QT_OBJ_FLAGS) $(QT_INCLUDES) -c -o menu.o menu.cc
 
 leftLayout.o: leftLayout.cc leftLayout.hh
 	$(COMP) $(QT_OBJ_FLAGS) $(QT_INCLUDES) -c -o leftLayout.o leftLayout.cc
