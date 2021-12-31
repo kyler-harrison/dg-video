@@ -1,3 +1,5 @@
+#include "vidViewer.hh"
+
 #include <QMenuBar>
 
 /*
@@ -5,10 +7,7 @@
  */
 
 class Menu : public QMenuBar {
-	private:
-		const char *filePath;
-
 	public:
 		Menu(QWidget *parent = nullptr);
-		void handleFile();
+		Menu(QWidget *parent = nullptr, VidViewer *vidViewer = nullptr);
 };

@@ -2,6 +2,7 @@
 
 #include <opencv2/opencv.hpp>
 #include <QImage>
+#include <QFileDialog>
 
 using namespace cv;
 
@@ -23,4 +24,14 @@ VidViewer::VidViewer(QWidget *parent) : QLabel(parent) {
 	cvtColor(img, img, COLOR_BGR2RGB);  // qt uses BGR while cv uses RGB
 	QImage imdisplay((unsigned char *) img.data, img.cols, img.rows, img.step, QImage::Format_RGB888);
 	this->setPixmap(QPixmap::fromImage(imdisplay));
+}
+
+/*
+ *  Opens file dialog and prints out path. Will probably move this later.
+ */
+
+void VidViewer::handleFile() {
+	const char *path = qUtf8Printable(QFileDialog::getOpenFileName());
+	this->filePath = path;
+	qDebug("%s", this->filePath);
 }
