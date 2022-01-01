@@ -1,10 +1,9 @@
 #include "vidViewer.hh"
+#include "../cv/video.hh"
 
 #include <opencv2/opencv.hpp>
 #include <QImage>
 #include <QFileDialog>
-
-using namespace cv;
 
 /*
  *  Video viewer label. 
@@ -20,8 +19,8 @@ VidViewer::VidViewer(QWidget *parent) : QLabel(parent) {
 	this->setFixedSize(1500, 1000);
 
 	// load in image with opencv and display with qt (also temporary)
-	Mat img = imread("im.jpg");
-	cvtColor(img, img, COLOR_BGR2RGB);  // qt uses BGR while cv uses RGB
+	Video *video = new Video();
+	cv::Mat img = video->getFrame("im.jpg");
 	QImage imdisplay((unsigned char *) img.data, img.cols, img.rows, img.step, QImage::Format_RGB888);
 	this->setPixmap(QPixmap::fromImage(imdisplay));
 }
