@@ -1,36 +1,47 @@
 #include "vidViewer.hh"
-#include "../cv/video.hh"
 
-#include <opencv2/opencv.hpp>
 #include <QImage>
 #include <QFileDialog>
 
 /*
- *  Video viewer label. 
- *  NOTE i think i should move all image processing to another dir
- *  and use this purely as the gui aspect, so gui would take in vid
- *  path and send off to image processing land, and then the data to
- *  display is returned to the gui and converted to QT image display
+ *  Video viewer label init.
+ *
+ *  @param parent QWidget pointer to parent object.
  */
 
 VidViewer::VidViewer(QWidget *parent) : QLabel(parent) {
-	// TODO temporary stuff
+	// TODO rm this temporary stuff
 	this->setStyleSheet("background-color: blue");
 	this->setFixedSize(1500, 1000);
-
-	// load in image with opencv and display with qt (also temporary)
-	Video *video = new Video();
-	cv::Mat img = video->getFrame("im.jpg");
-	QImage imdisplay((unsigned char *) img.data, img.cols, img.rows, img.step, QImage::Format_RGB888);
-	this->setPixmap(QPixmap::fromImage(imdisplay));
 }
 
 /*
- *  Opens file dialog and prints out path. Will probably move this later.
+ *  Opens file dialog, creates a Video object with given file path.
+ *
+ *  @param void
+ *  @return void
  */
 
 void VidViewer::handleFile() {
-	const char *path = qUtf8Printable(QFileDialog::getOpenFileName());
-	this->filePath = path;
-	qDebug("%s", this->filePath);
+	// get path from dialog 
+	std::string path = QFileDialog::getOpenFileName().toStdString();
+	this->video = Video(path);
+	std::cout << path << "\n";
+
+	// load and display first frame
+	cv::Mat frame = this->video.getNextFrame();
+	this->displayFrame(frame);
+}
+
+/*
+ *  Displays an image on the gui.
+ *
+ *  @param frame opencv Mat object of the frame to display.
+ *  @return void
+ */
+
+void VidViewer::displayFrame(cv::Mat frame) {
+	// convert frame's data to QImage
+	QImage imdisplay((unsigned char *) frame.data, frame.cols, frame.rows, frame.step, QImage::Format_RGB888);
+	this->setPixmap(QPixmap::fromImage(imdisplay));
 }
