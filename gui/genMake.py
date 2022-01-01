@@ -43,7 +43,7 @@ def checkIncludes(ccFile, headers):
 		return "neither"
 
 
-def writeMake(sources, headers, includes, exeTarget, makePath="Makefile"):
+def writeMake(sources, headers, includes, exeTarget, otherDirs, makePath="Makefile"):
 	"""
 	creates a Makefile from .cc and .hh files, make to build final exe
 
@@ -96,11 +96,18 @@ def writeMake(sources, headers, includes, exeTarget, makePath="Makefile"):
 		for targetLine in targetLines:
 			fi.write(f"{targetLine}\n\n")
 
-		fi.write("# build the final executable\nbuild_app: $(OBJS)\n\t$(COMP) $(CFLAGS) $(CV_FLAGS) $(QT_FLAGS) -o $(TARGET) $(OBJS) $(CV_LIBS) $(QT_LIBS)\n\n.PHONY: clean\nclean:\n\trm *.o")
+		cleanTarget = ".PHONY: clean\nclean:\n\trm *.o"
+		for otherDir in otherDirs:
+			cleanTarget += f"\n\trm {otherDir}/*.o"
+
+		fi.write(f"# build the final executable\nbuild_app: $(OBJS)\n\t$(COMP) $(CFLAGS) $(CV_FLAGS) $(QT_FLAGS) -o $(TARGET) $(OBJS) $(CV_LIBS) $(QT_LIBS)\n\n{cleanTarget}")
 
 
 def main():
 	files = os.listdir()
+	cvDir = "../cv"
+	otherDirs = [cvDir]
+	files += [f"{cvDir}/{f}" for f in os.listdir(cvDir)]
 	sources = [f for f in files if f[-3:] == ".cc"]
 	headers = [f for f in files if f[-3:] == ".hh"]
 	exe = "app"
@@ -115,7 +122,7 @@ def main():
 
 		includeDict[src[:-3]] = includeStr
 
-	writeMake(sources, headers, includeDict, exe)
+	writeMake(sources, headers, includeDict, exe, otherDirs)
 
 
 if __name__ == "__main__":
