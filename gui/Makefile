@@ -1,10 +1,9 @@
 # general compiler stuff
 COMP = g++
-CFLAGS = -O1
+CFLAGS = -O1 -g
 OBJS = main.o parentLayout.o vidControls.o rightLayout.o menu.o vidViewer.o window.o leftLayout.o ../cv/video.o
 TARGET = app
 
-# opencv stuff (build objs, then to compilation with qt stuff)
 CV_INCLUDES = -I /usr/local/include/opencv2
 CV_OBJ_LIBS = -L /usr/local/lib
 CV_FLAGS = -lopencv_core -lopencv_imgproc -lopencv_highgui -lopencv_ml -lopencv_video -lopencv_features2d -lopencv_calib3d -lopencv_objdetect -lopencv_stitching
@@ -16,7 +15,7 @@ QT_INCLUDES = -I. -I. -isystem /usr/include/x86_64-linux-gnu/qt5 -isystem /usr/i
 QT_FLAGS = -lpthread
 QT_LIBS = /usr/lib/x86_64-linux-gnu/libQt5Widgets.so /usr/lib/x86_64-linux-gnu/libQt5Gui.so /usr/lib/x86_64-linux-gnu/libQt5Core.so /usr/lib/x86_64-linux-gnu/libGL.so
 
-all: main.o parentLayout.o vidControls.o rightLayout.o menu.o vidViewer.o window.o leftLayout.o ../cv/video.o build_app clean
+all: main.o parentLayout.o vidControls.o rightLayout.o menu.o vidViewer.o window.o leftLayout.o ../cv/video.o build_app
 	@echo It has been made.
 
 #build object files
@@ -36,7 +35,7 @@ menu.o: menu.cc menu.hh
 	$(COMP) $(QT_OBJ_FLAGS) $(QT_INCLUDES) -c -o menu.o menu.cc
 
 vidViewer.o: vidViewer.cc vidViewer.hh
-	$(COMP) $(QT_OBJ_FLAGS) $(QT_INCLUDES) $(CV_INCLUDES) $(CV_OBJ_LIBS) -c -o vidViewer.o vidViewer.cc
+	$(COMP) $(QT_OBJ_FLAGS) $(QT_INCLUDES) -c -o vidViewer.o vidViewer.cc
 
 window.o: window.cc window.hh
 	$(COMP) $(QT_OBJ_FLAGS) $(QT_INCLUDES) -c -o window.o window.cc
@@ -51,7 +50,3 @@ leftLayout.o: leftLayout.cc leftLayout.hh
 build_app: $(OBJS)
 	$(COMP) $(CFLAGS) $(CV_FLAGS) $(QT_FLAGS) -o $(TARGET) $(OBJS) $(CV_LIBS) $(QT_LIBS)
 
-.PHONY: clean
-clean:
-	rm *.o
-	rm ../cv/*.o
