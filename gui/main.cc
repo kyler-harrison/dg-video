@@ -13,5 +13,11 @@ int main(int argc, char **argv)
 		window->setWindowState(Qt::WindowMaximized);
 		window->show();
 
-    return app.exec();
+		// start app main event loop
+    app.exec();
+
+		// i believe this also frees all heap-allocated children of window (everything?)
+		delete window;  
+
+		return 0;
 }
