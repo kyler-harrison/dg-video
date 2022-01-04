@@ -7,16 +7,17 @@
  */
 
 Window::Window(QWidget *parent) : QMainWindow(parent) {
-	ParentLayout *parentLayout = new ParentLayout(this);
-	QWidget *parentWidget = new QWidget(this);
-	parentWidget->setLayout(parentLayout);
-	this->setCentralWidget(parentWidget);
+	this->parentWidget->setLayout(this->parentLayout);
+	this->setCentralWidget(this->parentWidget);
 }
 
 void Window::cleanup() {
+	// this also appears to delete parentLayout
+	delete this->parentWidget;  
 }
 
 void Window::closeEvent(QCloseEvent *event) {
 	std::cout << "closing...\n";
 	event->accept();
+	this->cleanup();
 }
