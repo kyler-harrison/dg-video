@@ -14,6 +14,10 @@ class Window : public QMainWindow {
 
 	private:
 		void closeEvent(QCloseEvent *event);
+		// this is the master parent widget, make everything a child descendant
+		// and free only parentWidget to free everything
+		QWidget *parentWidget = new QWidget();  
+		ParentLayout *parentLayout = new ParentLayout();
 
 	public:
 		Window(QWidget *parent = nullptr);
