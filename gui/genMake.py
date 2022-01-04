@@ -149,7 +149,7 @@ def writeMake(srcNames, infoDict, otherDirs, makePath="Makefile"):
 		elif infoDict[srcName]["libDepend"] == "opencv":
 			srcTarget += f"$(GPP) $(CV_INCLUDES) $(CV_OBJ_LIBS) -c -o {srcName}.o {srcName}.cc"
 		elif infoDict[srcName]["libDepend"] == "opencv&qt":
-			srcTarget += f"$(GPP) $(QT_OBJ_FLAGS) $(QT_INCLUDES) $(CV_INCLUDES) $(CV_OBJ_LIBS) -c -o {srcName} {srcName}.cc"
+			srcTarget += f"$(GPP) $(QT_OBJ_FLAGS) $(QT_INCLUDES) $(CV_INCLUDES) $(CV_OBJ_LIBS) -c -o {srcName}.o {srcName}.cc"
 		else:
 			print(f"unknown lib depend: {infoDict[srcName]['libDepend']}")
 			sys.exit(-1)
