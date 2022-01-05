@@ -15,16 +15,22 @@ main_DEPENDS = $(shell $(GPP) -MM main.cc | $(GREP))
 moc_parentLayout_DEPENDS = parentLayout.hh $(shell $(GPP) -MM parentLayout.hh | $(GREP))
 parentLayout_DEPENDS = $(shell $(GPP) -MM parentLayout.cc | $(GREP))
 vidControls_DEPENDS = $(shell $(GPP) -MM vidControls.cc | $(GREP))
+moc_MyLabel_DEPENDS = MyLabel.hh $(shell $(GPP) -MM MyLabel.hh | $(GREP))
+MyLabel_DEPENDS = $(shell $(GPP) -MM MyLabel.cc | $(GREP))
+moc_parentWidget_DEPENDS = parentWidget.hh $(shell $(GPP) -MM parentWidget.hh | $(GREP))
+parentWidget_DEPENDS = $(shell $(GPP) -MM parentWidget.cc | $(GREP))
+moc_rightLayout_DEPENDS = rightLayout.hh $(shell $(GPP) -MM rightLayout.hh | $(GREP))
 rightLayout_DEPENDS = $(shell $(GPP) -MM rightLayout.cc | $(GREP))
 menu_DEPENDS = $(shell $(GPP) -MM menu.cc | $(GREP))
 vidViewer_DEPENDS = $(shell $(GPP) -MM vidViewer.cc | $(GREP))
 moc_window_DEPENDS = window.hh $(shell $(GPP) -MM window.hh | $(GREP))
 window_DEPENDS = $(shell $(GPP) -MM window.cc | $(GREP))
+moc_leftLayout_DEPENDS = leftLayout.hh $(shell $(GPP) -MM leftLayout.hh | $(GREP))
 leftLayout_DEPENDS = $(shell $(GPP) -MM leftLayout.cc | $(GREP))
 ../cv/video_DEPENDS = $(shell $(GPP) -MM ../cv/video.cc | $(GREP))
-OBJS = main.o parentLayout.o vidControls.o rightLayout.o menu.o vidViewer.o window.o leftLayout.o ../cv/video.o moc_parentLayout.o moc_window.o
+OBJS = main.o parentLayout.o vidControls.o MyLabel.o parentWidget.o rightLayout.o menu.o vidViewer.o window.o leftLayout.o ../cv/video.o moc_parentLayout.o moc_MyLabel.o moc_parentWidget.o moc_rightLayout.o moc_window.o moc_leftLayout.o
 
-all: mocPredefs.h moc_parentLayout.cc moc_window.cc $(OBJS) build_app
+all: mocPredefs.h moc_parentLayout.cc moc_MyLabel.cc moc_parentWidget.cc moc_rightLayout.cc moc_window.cc moc_leftLayout.cc $(OBJS) build_app
 	@echo It has been made.
 
 mocPredefs.h: /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/data/dummy.cpp
@@ -45,6 +51,30 @@ parentLayout.o: $(parentLayout_DEPENDS)
 vidControls.o: $(vidControls_DEPENDS)
 	$(GPP) $(QT_OBJ_FLAGS) $(QT_INCLUDES) -c -o vidControls.o vidControls.cc
 
+moc_MyLabel.cc: $(moc_MyLabel_DEPENDS) /usr/lib/qt5/bin/moc
+	/usr/lib/qt5/bin/moc $(DEFINES) --include /home/kyguy/dgvid/gui/mocPredefs.h -I/usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++ -I/home/kyguy/dgvid/gui -I/home/kyguy/dgvid/gui -I/usr/include/x86_64-linux-gnu/qt5 -I/usr/include/x86_64-linux-gnu/qt5/QtWidgets -I/usr/include/x86_64-linux-gnu/qt5/QtGui -I/usr/include/x86_64-linux-gnu/qt5/QtCore -I/usr/include/c++/9 -I/usr/include/x86_64-linux-gnu/c++/9 -I/usr/include/c++/9/backward -I/usr/lib/gcc/x86_64-linux-gnu/9/include -I/usr/local/include -I/usr/include/x86_64-linux-gnu -I/usr/include MyLabel.hh -o moc_MyLabel.cc
+
+moc_MyLabel.o: moc_MyLabel.cc
+	$(GPP) $(QT_OBJ_FLAGS) $(QT_INCLUDES) -c -o moc_MyLabel.o moc_MyLabel.cc
+
+MyLabel.o: $(MyLabel_DEPENDS)
+	$(GPP) $(QT_OBJ_FLAGS) $(QT_INCLUDES) -c -o MyLabel.o MyLabel.cc
+
+moc_parentWidget.cc: $(moc_parentWidget_DEPENDS) /usr/lib/qt5/bin/moc
+	/usr/lib/qt5/bin/moc $(DEFINES) --include /home/kyguy/dgvid/gui/mocPredefs.h -I/usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++ -I/home/kyguy/dgvid/gui -I/home/kyguy/dgvid/gui -I/usr/include/x86_64-linux-gnu/qt5 -I/usr/include/x86_64-linux-gnu/qt5/QtWidgets -I/usr/include/x86_64-linux-gnu/qt5/QtGui -I/usr/include/x86_64-linux-gnu/qt5/QtCore -I/usr/include/c++/9 -I/usr/include/x86_64-linux-gnu/c++/9 -I/usr/include/c++/9/backward -I/usr/lib/gcc/x86_64-linux-gnu/9/include -I/usr/local/include -I/usr/include/x86_64-linux-gnu -I/usr/include parentWidget.hh -o moc_parentWidget.cc
+
+moc_parentWidget.o: moc_parentWidget.cc
+	$(GPP) $(QT_OBJ_FLAGS) $(QT_INCLUDES) -c -o moc_parentWidget.o moc_parentWidget.cc
+
+parentWidget.o: $(parentWidget_DEPENDS)
+	$(GPP) $(QT_OBJ_FLAGS) $(QT_INCLUDES) -c -o parentWidget.o parentWidget.cc
+
+moc_rightLayout.cc: $(moc_rightLayout_DEPENDS) /usr/lib/qt5/bin/moc
+	/usr/lib/qt5/bin/moc $(DEFINES) --include /home/kyguy/dgvid/gui/mocPredefs.h -I/usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++ -I/home/kyguy/dgvid/gui -I/home/kyguy/dgvid/gui -I/usr/include/x86_64-linux-gnu/qt5 -I/usr/include/x86_64-linux-gnu/qt5/QtWidgets -I/usr/include/x86_64-linux-gnu/qt5/QtGui -I/usr/include/x86_64-linux-gnu/qt5/QtCore -I/usr/include/c++/9 -I/usr/include/x86_64-linux-gnu/c++/9 -I/usr/include/c++/9/backward -I/usr/lib/gcc/x86_64-linux-gnu/9/include -I/usr/local/include -I/usr/include/x86_64-linux-gnu -I/usr/include rightLayout.hh -o moc_rightLayout.cc
+
+moc_rightLayout.o: moc_rightLayout.cc
+	$(GPP) $(QT_OBJ_FLAGS) $(QT_INCLUDES) -c -o moc_rightLayout.o moc_rightLayout.cc
+
 rightLayout.o: $(rightLayout_DEPENDS)
 	$(GPP) $(QT_OBJ_FLAGS) $(QT_INCLUDES) -c -o rightLayout.o rightLayout.cc
 
@@ -63,6 +93,12 @@ moc_window.o: moc_window.cc
 window.o: $(window_DEPENDS)
 	$(GPP) $(QT_OBJ_FLAGS) $(QT_INCLUDES) -c -o window.o window.cc
 
+moc_leftLayout.cc: $(moc_leftLayout_DEPENDS) /usr/lib/qt5/bin/moc
+	/usr/lib/qt5/bin/moc $(DEFINES) --include /home/kyguy/dgvid/gui/mocPredefs.h -I/usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++ -I/home/kyguy/dgvid/gui -I/home/kyguy/dgvid/gui -I/usr/include/x86_64-linux-gnu/qt5 -I/usr/include/x86_64-linux-gnu/qt5/QtWidgets -I/usr/include/x86_64-linux-gnu/qt5/QtGui -I/usr/include/x86_64-linux-gnu/qt5/QtCore -I/usr/include/c++/9 -I/usr/include/x86_64-linux-gnu/c++/9 -I/usr/include/c++/9/backward -I/usr/lib/gcc/x86_64-linux-gnu/9/include -I/usr/local/include -I/usr/include/x86_64-linux-gnu -I/usr/include leftLayout.hh -o moc_leftLayout.cc
+
+moc_leftLayout.o: moc_leftLayout.cc
+	$(GPP) $(QT_OBJ_FLAGS) $(QT_INCLUDES) -c -o moc_leftLayout.o moc_leftLayout.cc
+
 leftLayout.o: $(leftLayout_DEPENDS)
 	$(GPP) $(QT_OBJ_FLAGS) $(QT_INCLUDES) -c -o leftLayout.o leftLayout.cc
 
@@ -70,7 +106,7 @@ leftLayout.o: $(leftLayout_DEPENDS)
 	$(GPP) $(CV_INCLUDES) $(CV_OBJ_LIBS) -c -o ../cv/video.o ../cv/video.cc
 
 build_app: $(OBJS)
-	$(GPP) $(CFLAGS) $(CV_FLAGS) $(QT_FLAGS) -o $(TARGET) $(OBJS) $(CV_LIBS) $(QT_LIBS)
+	$(GPP) $(GPP_FLAGS) $(CV_FLAGS) $(QT_FLAGS) -o $(TARGET) $(OBJS) $(CV_LIBS) $(QT_LIBS)
 
 .PHONY: clean
 clean:
