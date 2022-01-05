@@ -1,14 +1,16 @@
 #include "rightLayout.hh"
-#include <QLabel>
 
 /*
  *  Creates settings for right side of application.
+ *
+ *  @param parent QWidget* parent object
  */
 
 RightLayout::RightLayout(QWidget *parent) : QVBoxLayout(parent) {
 	// right side settings/info box
-	QLabel *rightInfo = new QLabel("INFO/SETTINGS");
-	rightInfo->setStyleSheet("background-color: green");
+	this->info = new QLabel("settings and stuff");
+	this->info->setStyleSheet("background-color: green");
+
 	this->addSpacing(16);
-	this->addWidget(rightInfo);
+	this->addWidget(info);
 }
