@@ -160,7 +160,7 @@ def writeMake(srcNames, infoDict, otherDirs, makePath="Makefile"):
 	variables.append(objVar)
 
 	# final build command
-	buildTarget = "build_app: $(OBJS)\n\t$(GPP) $(CFLAGS) $(CV_FLAGS) $(QT_FLAGS) -o $(TARGET) $(OBJS) $(CV_LIBS) $(QT_LIBS)"
+	buildTarget = "build_app: $(OBJS)\n\t$(GPP) $(GPP_FLAGS) $(CV_FLAGS) $(QT_FLAGS) -o $(TARGET) $(OBJS) $(CV_LIBS) $(QT_LIBS)"
 	targets.append(buildTarget)
 
 	# all except moc targets are also object names
