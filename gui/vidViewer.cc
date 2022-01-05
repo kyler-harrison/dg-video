@@ -6,17 +6,17 @@
 /*
  *  Video viewer label init.
  *
- *  @param parent QWidget pointer to parent object.
+ *  @param parent QWidget* parent object 
  */
 
 VidViewer::VidViewer(QWidget *parent) : QLabel(parent) {
-	// TODO rm this temporary stuff
+	// temporary stuff
 	this->setStyleSheet("background-color: blue");
 	this->setFixedSize(1500, 1000);
 }
 
 /*
- *  Opens file dialog, creates a Video object with given file path.
+ *  Opens file dialog and defines a Video object with given file path.
  *
  *  @param void
  *  @return void
@@ -25,11 +25,10 @@ VidViewer::VidViewer(QWidget *parent) : QLabel(parent) {
 void VidViewer::handleFile() {
 	// get path from dialog 
 	std::string path = QFileDialog::getOpenFileName().toStdString();
-	this->video = Video(path);
-	std::cout << path << "\n";
+	this->video = new Video(path);
 
 	// load and display first frame
-	cv::Mat frame = this->video.getNextFrame();
+	cv::Mat frame = this->video->getNextFrame();
 	this->displayFrame(frame);
 }
 

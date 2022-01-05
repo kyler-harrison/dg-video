@@ -1,16 +1,16 @@
 #include "parentLayout.hh"
-#include "leftLayout.hh"
-#include "rightLayout.hh"
-#include <QLabel>
 
 /*
- *  Creates a left and right layout (see leftLayout.hh and rightLayout.hh).
+ *  Creates left and right sub-layouts.
+ *
+ *  @param parent QWidget* parent object
  */
 
 ParentLayout::ParentLayout(QWidget *parent) : QHBoxLayout(parent) {
-	LeftLayout *left = new LeftLayout();
-	RightLayout *right = new RightLayout();
+	// each gets the same parent as this
+	this->left = new LeftLayout();
+	this->right = new RightLayout();
 
-	this->addLayout(left);
-	this->addLayout(right);
+	this->addLayout(this->left);
+	this->addLayout(this->right);
 }

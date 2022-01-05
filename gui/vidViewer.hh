@@ -3,13 +3,14 @@
 #include <QLabel>
 
 /*
- *  Main video viewer label. Handles all gui aspects of viewing images. 
- *  Depends on a Video object to do any image processing.
+ *  Main video viewer label. Handles all gui aspects of viewing images
+ *  and communicates with external cv dir. Depends on a Video object for 
+ *  image processing.
  */
 
 class VidViewer : public QLabel {
 	private:
-		Video video;
+		Video *video;
 
 	public:
 		VidViewer(QWidget *parent = nullptr);

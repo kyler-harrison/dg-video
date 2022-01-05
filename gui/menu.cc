@@ -1,19 +1,24 @@
 #include "menu.hh"
 
 #include <QApplication>
-#include <QMenu>
-#include <QAction>
 
 /*
  *  Top menu bar with "open" file dropdown.
+ *
+ *  @param parent QWidget* parent object
+ *  @param vidViewer VidViewer* main video viewer of the application to file open action to
  */
 
 Menu::Menu(QWidget *parent, VidViewer *vidViewer) : QMenuBar(parent) {
-	QMenu *fileOption = this->addMenu("&File");
-	QAction *open = new QAction("&Open", qApp);  // qApp is a macro defined in QApplication
-	fileOption->addAction(open);
-	//connect(open, &QAction::triggered, this, &Menu::handleFile);  // TODO make img viewer its own class and define handle in there, pass img viewer obj to this
-	connect(open, &QAction::triggered, vidViewer, &VidViewer::handleFile);  // TODO make img viewer its own class and define handle in there, pass img viewer obj to this
+	// add "File" to menu
+	this->fileOption = this->addMenu("&File");
+
+	// add "Open" to menu and connect it to the vidViewer
+	this->open = new QAction("&Open", qApp);  // qApp is a macro defined in QApplication
+	this->fileOption->addAction(open);
+	connect(this->open, &QAction::triggered, vidViewer, &VidViewer::handleFile);  
+
+	// temporary
 	this->setStyleSheet("background-color: purple");
 }
 

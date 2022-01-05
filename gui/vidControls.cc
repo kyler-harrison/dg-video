@@ -1,7 +1,9 @@
 #include "vidControls.hh"
 
 /*
- *  Bottom video controls.
+ *  Bottom left video controls.
+ *
+ *  @param parent QWidget* parent object
  */
 
 VidControls::VidControls(QWidget *parent) : QLabel(parent) {

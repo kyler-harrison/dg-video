@@ -1,7 +1,7 @@
 #include <QLabel>
 
 /*
- *  Bottom video controls.
+ *  Bottom left video controls.
  */
 
 class VidControls : public QLabel {
