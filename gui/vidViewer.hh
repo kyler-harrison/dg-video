@@ -17,4 +17,5 @@ class VidViewer : public QLabel {
 		void handleFile();
 		void loadFrame();
 		void displayFrame(cv::Mat frame);
+		void cleanup();
 };

@@ -16,4 +16,5 @@ class ParentLayout : public QHBoxLayout {
 
 	public:
 		ParentLayout(QWidget *parent = nullptr);
+		void cleanup();
 };

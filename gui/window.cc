@@ -1,5 +1,7 @@
 #include "window.hh"
 
+#include <iostream>
+
 /*
  *  Defines parentWidget and parentLayout, sets parentWidget as the
  *  central widget.
@@ -22,6 +24,7 @@ Window::Window(QWidget *parent) : QMainWindow(parent) {
  */
 
 void Window::cleanup() {
+	this->parentLayout->cleanup();
 	delete this->parentWidget;  
 }
 

@@ -14,3 +14,7 @@ ParentLayout::ParentLayout(QWidget *parent) : QHBoxLayout(parent) {
 	this->addLayout(this->left);
 	this->addLayout(this->right);
 }
+
+void ParentLayout::cleanup() {
+	this->left->cleanup();
+}

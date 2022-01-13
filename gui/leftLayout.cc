@@ -26,3 +26,6 @@ LeftLayout::LeftLayout(QWidget *parent) : QVBoxLayout(parent) {
 	this->addWidget(this->vidControls);
 }
 
+void LeftLayout::cleanup() {
+	this->vidViewer->cleanup();
+}

@@ -44,3 +44,7 @@ void VidViewer::displayFrame(cv::Mat frame) {
 	QImage imdisplay((unsigned char *) frame.data, frame.cols, frame.rows, frame.step, QImage::Format_RGB888);
 	this->setPixmap(QPixmap::fromImage(imdisplay));
 }
+
+void VidViewer::cleanup() {
+	this->video->cleanup();
+}

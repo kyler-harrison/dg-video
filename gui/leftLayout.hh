@@ -18,4 +18,5 @@ class LeftLayout : public QVBoxLayout {
 
 	public:
 		LeftLayout(QWidget *parent = nullptr);
+		void cleanup();
 };
