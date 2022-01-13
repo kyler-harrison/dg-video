@@ -26,6 +26,7 @@ void VidViewer::handleFile() {
 	// get path from dialog 
 	std::string path = QFileDialog::getOpenFileName().toStdString();
 	this->video = new Video(path);
+	this->vidOpen = true;
 
 	// load and display first frame
 	cv::Mat frame = this->video->getNextFrame();
@@ -46,5 +47,7 @@ void VidViewer::displayFrame(cv::Mat frame) {
 }
 
 void VidViewer::cleanup() {
-	this->video->cleanup();
+	if (this->vidOpen) {
+		this->video->cleanup();
+	}
 }
