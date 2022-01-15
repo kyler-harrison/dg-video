@@ -11,6 +11,7 @@
 class VidViewer : public QLabel {
 	private:
 		Video *video;
+		bool vidOpen = false;
 
 	public:
 		VidViewer(QWidget *parent = nullptr);
