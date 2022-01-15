@@ -169,7 +169,7 @@ def writeMake(srcNames, infoDict, otherDirs, makePath="Makefile"):
 	targets.insert(0, allTarget)
 
 	cleanRemoves = "\n\t".join([f"rm -f {otherDir}/*.o" for otherDir in otherDirs])
-	cleanTarget = f".PHONY: clean\nclean:\n\trm -f moc*\n\trm -f *.o\n\t{cleanRemoves}"
+	cleanTarget = f".PHONY: clean\nclean:\n\trm -f gui/moc*\n\trm -f *.o\n\t{cleanRemoves}"
 
 	# write everything 
 	with open(makePath, 'w') as f:
@@ -185,7 +185,7 @@ def writeMake(srcNames, infoDict, otherDirs, makePath="Makefile"):
 			
 
 def main():
-	print("DID YOU CLEAN PWD OF ALL moc* FILES B4 RUNNING THIS?")
+	print("DID YOU CLEAN ./gui/ OF ALL moc* FILES B4 RUNNING THIS?")
 
 	# get all required source and header files
 	cvDir = "cv"

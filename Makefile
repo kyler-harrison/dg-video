@@ -99,7 +99,7 @@ build_app: $(OBJS)
 
 .PHONY: clean
 clean:
-	rm -f moc*
+	rm -f gui/moc*
 	rm -f *.o
 	rm -f cv/*.o
 	rm -f gui/*.o
