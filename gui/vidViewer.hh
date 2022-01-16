@@ -1,3 +1,4 @@
+#pragma once
 #include "../cv/video.hh"
 
 #include <QLabel>
@@ -18,5 +19,7 @@ class VidViewer : public QLabel {
 		void handleFile();
 		void loadFrame();
 		void displayFrame(cv::Mat frame);
+		void handleNext();
+		void handleBack();
 		void cleanup();
 };

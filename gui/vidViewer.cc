@@ -1,5 +1,6 @@
 #include "vidViewer.hh"
 
+#include <iostream>
 #include <QImage>
 #include <QFileDialog>
 
@@ -45,6 +46,33 @@ void VidViewer::displayFrame(cv::Mat frame) {
 	QImage imdisplay((unsigned char *) frame.data, frame.cols, frame.rows, frame.step, QImage::Format_RGB888);
 	this->setPixmap(QPixmap::fromImage(imdisplay));
 }
+
+/*
+ *  Handles back frame click by calling Video's getPrevFrame (TODO implement) 
+ *
+ *  @return void
+ */
+
+void VidViewer::handleBack() {
+	std::cout << "back clicked\n";
+}
+
+/*
+ *  Handles next frame click by calling Video's getNextFrame.
+ *
+ *  @return void
+ */
+
+void VidViewer::handleNext() {
+	cv::Mat frame = this->video->getNextFrame();
+	this->displayFrame(frame);
+}
+
+/*
+ *  Cleanup on window close.
+ *
+ *  @return void
+ */
 
 void VidViewer::cleanup() {
 	if (this->vidOpen) {
