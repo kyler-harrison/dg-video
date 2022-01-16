@@ -64,8 +64,13 @@ void VidViewer::handleBack() {
  */
 
 void VidViewer::handleNext() {
-	cv::Mat frame = this->video->getNextFrame();
-	this->displayFrame(frame);
+	if (this->vidOpen){
+		cv::Mat frame = this->video->getNextFrame();
+
+		if (!frame.empty()) {
+			this->displayFrame(frame);
+		}
+	}
 }
 
 /*

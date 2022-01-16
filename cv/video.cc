@@ -41,7 +41,7 @@ Video::Video(std::string path) {
 cv::Mat Video::getNextFrame() {
 	// TODO do some input checks
 
-	// TODO check if frame already read
+	// TODO check if frame already read and check for valid next idx
 
 	// path to write temp frame to 
 	this->tempFramePath = this->tempFramesDir + this->frameName + std::to_string(this->frameIndex) + ".png";
@@ -53,11 +53,14 @@ cv::Mat Video::getNextFrame() {
 
 	// read in what ffmpeg outputted with opencv
 	cv::Mat frame = cv::imread(this->tempFramePath);
-	cv::cvtColor(frame, frame, cv::COLOR_BGR2RGB);  // qt uses BGR while cv uses RGB
 
-	// TODO track created frame indices 
+	if (!frame.empty()) {
+		cv::cvtColor(frame, frame, cv::COLOR_BGR2RGB);  // qt uses BGR while cv uses RGB
 
-	this->frameIndex++;
+		// TODO track created frame indices 
+
+		this->frameIndex++;
+	}
 
 	return frame;
 }
