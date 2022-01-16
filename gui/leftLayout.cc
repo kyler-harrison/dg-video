@@ -22,8 +22,9 @@ LeftLayout::LeftLayout(QWidget *parent) : QVBoxLayout(parent) {
 	this->setAlignment(this->vidViewer, Qt::AlignHCenter);
 
 	// video viewer controls
-	this->vidControls = new VidControls();
-	this->addWidget(this->vidControls);
+	this->vidControlsWidget = new QWidget();
+	this->vidControlsLayout = new VidControls(this->vidControlsWidget, this->vidViewer);
+	this->addWidget(this->vidControlsWidget);
 }
 
 void LeftLayout::cleanup() {

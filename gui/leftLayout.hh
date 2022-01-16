@@ -2,6 +2,7 @@
 #include "vidControls.hh"
 
 #include <QVBoxLayout>
+#include <QWidget>
 
 /*
  *  Vertical box layout of the left side of the application.
@@ -14,7 +15,8 @@ class LeftLayout : public QVBoxLayout {
 		const char *filePath;
 		VidViewer *vidViewer;
 		Menu *menu;
-		VidControls *vidControls;
+		QWidget *vidControlsWidget;
+		VidControls *vidControlsLayout;
 
 	public:
 		LeftLayout(QWidget *parent = nullptr);
