@@ -6,7 +6,6 @@
 
 class Video {
 	private:
-		int frameIndex = 0;
 		std::string filePath = "";  // input file
 		std::string tempFramePath = "";  // where to keep temp video frames
 		std::string tempDir = "./dgvidTemp/";
@@ -14,9 +13,13 @@ class Video {
 		std::string frameName = "frame";
 		std::string logDir = tempDir + "logs/";  
 		std::string logName = "log.txt";  
+		std::string countFramesPath = tempDir + "numFrames.txt";  
 
 	public:
+		int frameIndex = -1;
+		int numFrames = 0;
 		Video(std::string path = "");
 		cv::Mat getNextFrame();
 		void cleanup();
+		bool getNumFrames();
 };
