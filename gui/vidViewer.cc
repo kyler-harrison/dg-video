@@ -27,6 +27,13 @@ void VidViewer::handleFile() {
 	// get path from dialog 
 	std::string path = QFileDialog::getOpenFileName().toStdString();
 	this->video = new Video(path);
+	bool readSuccess = this->video->getNumFrames();
+
+	if (!readSuccess || this->video->numFrames <= 0) {
+		// TODO clean error handling, propagate through
+		return;
+	}
+
 	this->vidOpen = true;
 
 	// load and display first frame
