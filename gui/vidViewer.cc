@@ -1,8 +1,9 @@
 #include "vidViewer.hh"
 
 #include <iostream>
-#include <QImage>
 #include <QFileDialog>
+#include <QImage>
+#include <QLineEdit>
 
 /*
  *  Video viewer label init.
@@ -98,9 +99,11 @@ void VidViewer::handleNext() {
  *  @return void 
  */
 
-void VidViewer::handleSeek(int frameNum) {
-	if (this->vidOpen){
-		cv::Mat frame = this->video->seekFrame(frameNum);
+void VidViewer::handleSeek() {
+	QLineEdit *inpObj = qobject_cast<QLineEdit *>(sender());
+
+	if (this->vidOpen && inpObj){
+		cv::Mat frame = this->video->seekFrame(inpObj->text().toInt());
 
 		if (!frame.empty()) {
 			this->displayFrame(frame);

@@ -21,10 +21,12 @@ class VidViewer : public QLabel {
 		void handleFile();
 		void loadFrame();
 		void displayFrame(cv::Mat frame);
+		void cleanup();
+
+	public slots:
 		void handleNext();
 		void handlePrev();
-		void handleSeek(int frameNum);
-		void cleanup();
+		void handleSeek();
 
 	signals:
 		void vidLoaded();  // NOTE don't implement this, Q_OBJECT magic implementation behind the scenes
