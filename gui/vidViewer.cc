@@ -56,7 +56,8 @@ void VidViewer::displayFrame(cv::Mat frame) {
 }
 
 /*
- *  Handles prev frame click by calling Video's getPrevFrame (TODO implement) 
+ *  Handles prev frame click by calling Video's getPrevFrame and displaying
+ *  image.
  *
  *  @return void
  */
@@ -67,12 +68,14 @@ void VidViewer::handlePrev() {
 
 		if (!frame.empty()) {
 			this->displayFrame(frame);
+			emit newFrameLoaded();
 		}
 	}
 }
 
 /*
- *  Handles next frame click by calling Video's getNextFrame.
+ *  Handles next frame click by calling Video's getNextFrame and displaying
+ *  image.
  *
  *  @return void
  */
@@ -83,6 +86,25 @@ void VidViewer::handleNext() {
 
 		if (!frame.empty()) {
 			this->displayFrame(frame);
+			emit newFrameLoaded();
+		}
+	}
+}
+
+/*
+ *  Handles inputted frame number by calling Video's seekFrame and displaying
+ *  image.
+ *
+ *  @return void 
+ */
+
+void VidViewer::handleSeek(int frameNum) {
+	if (this->vidOpen){
+		cv::Mat frame = this->video->seekFrame(frameNum);
+
+		if (!frame.empty()) {
+			this->displayFrame(frame);
+			emit newFrameLoaded();
 		}
 	}
 }
