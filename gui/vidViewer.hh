@@ -10,16 +10,21 @@
  */
 
 class VidViewer : public QLabel {
+	Q_OBJECT
+
 	private:
-		Video *video;
 		bool vidOpen = false;
 
 	public:
 		VidViewer(QWidget *parent = nullptr);
+		Video *video;
 		void handleFile();
 		void loadFrame();
 		void displayFrame(cv::Mat frame);
 		void handleNext();
 		void handlePrev();
 		void cleanup();
+
+	signals:
+		void vidLoaded();  // NOTE don't implement this, Q_OBJECT magic implementation behind the scenes
 };

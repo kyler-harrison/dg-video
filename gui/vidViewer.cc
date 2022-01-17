@@ -39,6 +39,7 @@ void VidViewer::handleFile() {
 	// load and display first frame
 	cv::Mat frame = this->video->getNextFrame();
 	this->displayFrame(frame);
+	emit vidLoaded();
 }
 
 /*
