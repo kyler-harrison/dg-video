@@ -1,7 +1,6 @@
 #include "video.hh"
 
 #include <stdio.h>
-//#include <string.h>
 
 /*
  *  Initialize main video class with a file path.
@@ -71,7 +70,7 @@ bool Video::getNumFrames() {
  *  Gets a frame based on the current frameIndex. Reads index from video 
  *  with ffmpeg and writes the frame to temp dir. Returns cv::Mat of read frame. 
  *
- *  @return cv::Mat of frame
+ *  @return cv::Mat of image data
  */
 
 cv::Mat Video::loadFrame() {
@@ -96,7 +95,7 @@ cv::Mat Video::loadFrame() {
 /*
  *  Gets the next video frame based on current frameIndex. 
  *
- *  @return cv::Mat of image data.
+ *  @return cv::Mat of image data
  */
 
 cv::Mat Video::getNextFrame() {
@@ -106,7 +105,7 @@ cv::Mat Video::getNextFrame() {
 
 	// TODO check if frame already read and check for valid next idx
 
-	if ((this->frameIndex + 1) < this->numFrames) {
+	if (this->frameIndex + 1 < this->numFrames) {
 		this->frameIndex++;
 		return this->loadFrame();
 
@@ -116,10 +115,16 @@ cv::Mat Video::getNextFrame() {
 	}
 }
 
+/*
+ *  Gets the previous video frame based on current frameIndex. 
+ *
+ *  @return cv::Mat of image data
+ */
+
 cv::Mat Video::getPrevFrame() {
 	// TODO same stuff as getNextFrame()
 
-	if ((this->frameIndex - 1) >= 0) {
+	if (this->frameIndex - 1 >= 0) {
 		this->frameIndex--;
 		return this->loadFrame();
 
@@ -129,7 +134,24 @@ cv::Mat Video::getPrevFrame() {
 	}
 }
 
-cv::Mat Video::getFrameByIdx() {
+/*
+ *  Loads the frame at index frameNum - 1 (display is not index).
+ *
+ *  @param int frameNum user-inputted frame number to load
+ *  @return cv::Mat of image data
+ */
+
+cv::Mat Video::seekFrame(int frameNum) {
+	int idx = frameNum - 1;
+
+	if ((idx != this->frameIndex) && (idx >= 0) && (idx < this->numFrames)) {
+		this->frameIndex = idx;
+		return this->loadFrame();
+
+	} else {
+		cv::Mat emptyFrame;
+		return emptyFrame;
+	}
 }
 
 /*

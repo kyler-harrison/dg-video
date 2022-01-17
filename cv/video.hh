@@ -22,7 +22,7 @@ class Video {
 		Video(std::string path = "");
 		cv::Mat getNextFrame();
 		cv::Mat getPrevFrame();
-		cv::Mat getFrameByIdx();
+		cv::Mat seekFrame(int frameNum);
 		void cleanup();
 		bool getNumFrames();
 };
