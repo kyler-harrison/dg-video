@@ -25,6 +25,8 @@ LeftLayout::LeftLayout(QWidget *parent) : QVBoxLayout(parent) {
 	this->vidControlsWidget = new QWidget();
 	this->vidControlsLayout = new VidControls(this->vidControlsWidget, this->vidViewer);
 	this->addWidget(this->vidControlsWidget);
+
+	QObject::connect(this->vidViewer, &VidViewer::vidLoaded, this->vidControlsLayout, &VidControls::updateTotalFrames);
 }
 
 void LeftLayout::cleanup() {
