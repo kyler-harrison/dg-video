@@ -15,6 +15,7 @@ VidControls::VidControls(QWidget *parent, VidViewer *inpVidViewer) : QVBoxLayout
 	// frame / totalFrames input and label
 	QHBoxLayout *frameCountLayout = new QHBoxLayout();
 	this->inpFrame = new QLineEdit();  // TODO connect return press event to something in inpVidViewer to jump to frameIndex
+	//this->inpFrame->setInputMask("9999");  // input can only be up to 4 digits 0-9
 	this->inpFrame->setFixedWidth(80);
 	this->inpFrame->setText("1");  // NOTE display index is +1 actual index
 	this->numFrames = new QLabel("/ None");  // TODO connect to something in inpVidViewer when vid loaded and change to number of frames
@@ -23,6 +24,7 @@ VidControls::VidControls(QWidget *parent, VidViewer *inpVidViewer) : QVBoxLayout
 	frameCountLayout->addWidget(numFrames);
 	frameCountLayout->setAlignment(inpFrame, Qt::AlignRight);
 
+	// connect frame num display to VidViewer
 	QObject::connect(this->vidViewer, &VidViewer::newFrameLoaded, this, &VidControls::updateFrameNum);
 
 	// previous and next frame buttons
@@ -33,6 +35,7 @@ VidControls::VidControls(QWidget *parent, VidViewer *inpVidViewer) : QVBoxLayout
 	btnLayout->addWidget(nextBtn);
 	QObject::connect(prevBtn, &QPushButton::released, this->vidViewer, &VidViewer::handlePrev);  
 	QObject::connect(nextBtn, &QPushButton::released, this->vidViewer, &VidViewer::handleNext);  
+	QObject::connect(this->inpFrame, &QLineEdit::returnPressed, this->vidViewer, &VidViewer::handleSeek);
 
 	this->addLayout(frameCountLayout);
 	this->addLayout(btnLayout);
