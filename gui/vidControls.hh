@@ -2,6 +2,7 @@
 #include "vidViewer.hh"
 
 #include <QLabel>
+#include <QLineEdit>
 #include <QVBoxLayout>
 
 /*
@@ -13,6 +14,7 @@ class VidControls : public QVBoxLayout {
 
 	private:
 		QLabel *numFrames;
+		QLineEdit *inpFrame;
 		VidViewer *vidViewer;
 
 
@@ -21,4 +23,5 @@ class VidControls : public QVBoxLayout {
 
 	public slots:
 		void updateTotalFrames();
+		void updateFrameNum();
 };

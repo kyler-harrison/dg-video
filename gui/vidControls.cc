@@ -1,6 +1,5 @@
 #include "vidControls.hh"
 
-#include <QLineEdit>
 #include <QPushButton>
 
 /*
@@ -15,13 +14,16 @@ VidControls::VidControls(QWidget *parent, VidViewer *inpVidViewer) : QVBoxLayout
 
 	// frame / totalFrames input and label
 	QHBoxLayout *frameCountLayout = new QHBoxLayout();
-	QLineEdit *inpFrame = new QLineEdit();  // TODO connect return press event to something in inpVidViewer to jump to frameIndex
-	inpFrame->setFixedWidth(80);
-	inpFrame->setText("0");
+	this->inpFrame = new QLineEdit();  // TODO connect return press event to something in inpVidViewer to jump to frameIndex
+	this->inpFrame->setFixedWidth(80);
+	this->inpFrame->setText("1");  // NOTE display index is +1 actual index
 	this->numFrames = new QLabel("/ None");  // TODO connect to something in inpVidViewer when vid loaded and change to number of frames
-	frameCountLayout->addWidget(inpFrame);
+
+	frameCountLayout->addWidget(this->inpFrame);
 	frameCountLayout->addWidget(numFrames);
 	frameCountLayout->setAlignment(inpFrame, Qt::AlignRight);
+
+	QObject::connect(this->vidViewer, &VidViewer::newFrameLoaded, this, &VidControls::updateFrameNum);
 
 	// previous and next frame buttons
 	QHBoxLayout *btnLayout = new QHBoxLayout();
@@ -43,6 +45,12 @@ VidControls::VidControls(QWidget *parent, VidViewer *inpVidViewer) : QVBoxLayout
  */
 
 void VidControls::updateTotalFrames() {
-	std::string frameStr = "/ " + std::to_string(this->vidViewer->video->numFrames);
-	this->numFrames->setText(frameStr.c_str());
+	std::string numStr = "/ " + std::to_string(this->vidViewer->video->numFrames);
+	this->numFrames->setText(numStr.c_str());
+}
+
+void VidControls::updateFrameNum() {
+	// display actual index + 1
+	std::string frameStr = std::to_string(this->vidViewer->video->frameIndex + 1);
+	this->inpFrame->setText(frameStr.c_str());
 }
