@@ -62,7 +62,13 @@ void VidViewer::displayFrame(cv::Mat frame) {
  */
 
 void VidViewer::handlePrev() {
-	std::cout << "back clicked\n";
+	if (this->vidOpen){
+		cv::Mat frame = this->video->getPrevFrame();
+
+		if (!frame.empty()) {
+			this->displayFrame(frame);
+		}
+	}
 }
 
 /*

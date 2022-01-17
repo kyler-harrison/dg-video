@@ -68,8 +68,33 @@ bool Video::getNumFrames() {
 }
 
 /*
- *  Gets the next video frame based on current frameIndex. Reads index from video with ffmpeg
- *  and writes the frame to temp dir. Returns cv::Mat of read frame. 
+ *  Gets a frame based on the current frameIndex. Reads index from video 
+ *  with ffmpeg and writes the frame to temp dir. Returns cv::Mat of read frame. 
+ *
+ *  @return cv::Mat of frame
+ */
+
+cv::Mat Video::loadFrame() {
+	// path to write temp frame to 
+	this->tempFramePath = this->tempFramesDir + this->frameName + std::to_string(this->frameIndex) + ".png";
+
+	// ffmpeg cmd to extract frame
+	std::string frameCommand = "ffmpeg -y -i " + this->filePath + " -vf 'select=eq(n\\," + std::to_string(this->frameIndex) + ")' -vframes 1 " + this->tempFramePath + " > " + this->logDir + this->logName + " 2>&1";
+	const char *frameCommandC = frameCommand.c_str();
+	system(frameCommandC);
+
+	// read in what ffmpeg outputted with opencv
+	cv::Mat frame = cv::imread(this->tempFramePath);
+
+	if (!frame.empty()) {
+		cv::cvtColor(frame, frame, cv::COLOR_BGR2RGB);  // qt uses BGR while cv uses RGB
+	}
+
+	return frame;
+}
+
+/*
+ *  Gets the next video frame based on current frameIndex. 
  *
  *  @return cv::Mat of image data.
  */
@@ -81,31 +106,30 @@ cv::Mat Video::getNextFrame() {
 
 	// TODO check if frame already read and check for valid next idx
 
-	if ((frameIndex + 1) < this->numFrames) {
+	if ((this->frameIndex + 1) < this->numFrames) {
 		this->frameIndex++;
-
-		// path to write temp frame to 
-		this->tempFramePath = this->tempFramesDir + this->frameName + std::to_string(this->frameIndex) + ".png";
-
-		// ffmpeg cmd to extract frame
-		std::string frameCommand = "ffmpeg -y -i " + this->filePath + " -vf 'select=eq(n\\," + std::to_string(this->frameIndex) + ")' -vframes 1 " + this->tempFramePath + " > " + this->logDir + this->logName + " 2>&1";
-		const char *frameCommandC = frameCommand.c_str();
-		system(frameCommandC);
-
-		// read in what ffmpeg outputted with opencv
-		cv::Mat frame = cv::imread(this->tempFramePath);
-
-		if (!frame.empty()) {
-			cv::cvtColor(frame, frame, cv::COLOR_BGR2RGB);  // qt uses BGR while cv uses RGB
-
-		}
-
-		return frame;
+		return this->loadFrame();
 
 	} else {
 		cv::Mat emptyFrame;
 		return emptyFrame;
 	}
+}
+
+cv::Mat Video::getPrevFrame() {
+	// TODO same stuff as getNextFrame()
+
+	if ((this->frameIndex - 1) >= 0) {
+		this->frameIndex--;
+		return this->loadFrame();
+
+	} else {
+		cv::Mat emptyFrame;
+		return emptyFrame;
+	}
+}
+
+cv::Mat Video::getFrameByIdx() {
 }
 
 /*

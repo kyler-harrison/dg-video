@@ -14,12 +14,15 @@ class Video {
 		std::string logDir = tempDir + "logs/";  
 		std::string logName = "log.txt";  
 		std::string countFramesPath = tempDir + "numFrames.txt";  
+		cv::Mat loadFrame();
 
 	public:
 		int frameIndex = -1;
 		int numFrames = 0;
 		Video(std::string path = "");
 		cv::Mat getNextFrame();
+		cv::Mat getPrevFrame();
+		cv::Mat getFrameByIdx();
 		void cleanup();
 		bool getNumFrames();
 };
