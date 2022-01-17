@@ -20,6 +20,6 @@ class VidViewer : public QLabel {
 		void loadFrame();
 		void displayFrame(cv::Mat frame);
 		void handleNext();
-		void handleBack();
+		void handlePrev();
 		void cleanup();
 };

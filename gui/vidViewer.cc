@@ -55,12 +55,12 @@ void VidViewer::displayFrame(cv::Mat frame) {
 }
 
 /*
- *  Handles back frame click by calling Video's getPrevFrame (TODO implement) 
+ *  Handles prev frame click by calling Video's getPrevFrame (TODO implement) 
  *
  *  @return void
  */
 
-void VidViewer::handleBack() {
+void VidViewer::handlePrev() {
 	std::cout << "back clicked\n";
 }
 
