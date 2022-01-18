@@ -122,4 +122,6 @@ void VidViewer::cleanup() {
 	if (this->vidOpen) {
 		this->video->cleanup();
 	}
+
+	delete this->video;
 }
