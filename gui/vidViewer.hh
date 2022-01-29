@@ -14,6 +14,7 @@ class VidViewer : public QLabel {
 
 	private:
 		bool vidOpen = false;
+		void mouseDoubleClickEvent(QMouseEvent *event);  // override magic
 
 	public:
 		VidViewer(QWidget *parent = nullptr);

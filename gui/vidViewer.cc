@@ -4,6 +4,7 @@
 #include <QFileDialog>
 #include <QImage>
 #include <QLineEdit>
+#include <QMouseEvent>
 
 /*
  *  Video viewer label init.
@@ -124,4 +125,14 @@ void VidViewer::cleanup() {
 	}
 
 	delete this->video;
+}
+
+/*
+ *  Catches a mouse double click event.
+ *
+ *  @return void
+ */
+
+void VidViewer::mouseDoubleClickEvent(QMouseEvent *event) {
+	std::cout << "(" << event->x() << "," << event->y() << ")" << "\n";
 }
