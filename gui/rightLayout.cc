@@ -8,9 +8,10 @@
 
 RightLayout::RightLayout(QWidget *parent) : QVBoxLayout(parent) {
 	// right side settings/info box
-	this->info = new QLabel("settings and stuff");
-	this->info->setStyleSheet("background-color: green");
+	this->scaleButton = new QPushButton("Set scale");
+	this->scaleLabel = new QLabel("Scale is not set");
+	this->scaleLabel->setStyleSheet("background-color: green");
 
-	this->addSpacing(16);
-	this->addWidget(info);
+	this->addWidget(scaleButton);
+	this->addWidget(scaleLabel);
 }
